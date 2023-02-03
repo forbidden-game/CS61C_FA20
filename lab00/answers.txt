@@ -1,4 +1,4 @@
-1.
-2.
-3.
-4.
+1.first_set_command_1 grep
+2.first_set_command_2 ps
+3.first_set_command_3 kill
+4.first_set_command_4 diff
