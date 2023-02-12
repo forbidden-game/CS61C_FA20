@@ -1,0 +1,5 @@
+third_set_command_1 ls -l
+first_set_command_1 grep
+first_set_command_2 ps
+first_set_command_3 kill
+first_set_command_4 diff

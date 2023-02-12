@@ -1,0 +1,8 @@
+1.second_set_command_1 mv
+2.second_set_command_2 chmod
+3.second_set_command_3 pwd
+4.second_set_command_4 ping
+5.first_set_command_1 grep
+6.first_set_command_2 ps
+7.first_set_command_3 kill
+8.first_set_command_4 diff

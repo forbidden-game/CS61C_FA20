@@ -1,8 +1,17 @@
-1.second_set_command_1 mv
-2.second_set_command_2 chmod
-3.second_set_command_3 pwd
-4.second_set_command_4 ping
-5.first_set_command_1 grep
-6.first_set_command_2 ps
-7.first_set_command_3 kill
-8.first_set_command_4 diff
+<<<<<<< HEAD
+third_set_command_1 ls -l
+second_set_command_1 mv
+second_set_command_2 chmod
+second_set_command_3 pwd
+second_set_command_4 ping
+first_set_command_1 grep
+first_set_command_2 ps
+first_set_command_3 kill
+first_set_command_4 diff
+=======
+third_set_command_1 ls -l
+first_set_command_1 grep
+first_set_command_2 ps
+first_set_command_3 kill
+first_set_command_4 diff
+>>>>>>> origin/main
