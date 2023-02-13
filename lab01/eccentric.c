@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 /* Only change any of these 4 values */
-#define V0 0
-#define V1 -1
-#define V2 0
-#define V3 0
+#define V0 3
+#define V1 3
+#define V2 1
+#define V3 3
 
 int main(void) {
     int a;
@@ -41,7 +41,7 @@ int main(void) {
     case 5:
         printf("Hat Lady\n");
     default:
-        printf("I don't know these people!\n");
+        printf("I don't kerkeley eccentrics:====================now these people!\n");
     }
 
     /* ternary operator */
