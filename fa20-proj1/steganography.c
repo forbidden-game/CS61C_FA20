@@ -19,44 +19,35 @@
 #include "imageloader.h"
 
 //Determines what color the cell at the given row/col should be. This should not affect Image, and should allocate space for a new Color.
-Color *evaluateOnePixel(Image *image, int row, int col)
-{
+Color *evaluateOnePixel(Image *image, int row, int col) {
 	//YOUR CODE HERE
-    Color *r = (Color*) malloc(sizeof(Color));
-    if (image->image[(row - 1) * (col - 1)]->B) {
-        r->R = 255;
-        r->G = 255;
-        r->B = 255;
-    } else{
-        r->R = 0;
-        r->G = 0;
-        r->B = 0;
-    }
-    return r;
+	Color *r = (Color*) malloc(sizeof(Color));
+	int LSB = image->image[row * image->cols + col]->B & 1;
+	r->R = r->B = r->G = LSB * 255;
+	return r;
 }
 
 //Given an image, creates a new image extracting the LSB of the B channel.
-Image *steganography(Image *image)
-{
+Image *steganography(Image *image) {
 	//YOUR CODE HERE
-    int totp = image->rows * image->cols;
-    Image *decoded = (Image*) malloc(sizeof(Image*));
-    decoded->image = (Color **) malloc(sizeof(Image*) * totp);
+	int totp = image->rows * image->cols;
+	Image *decoded = (Image*) malloc(sizeof(Image));
+	decoded->cols = image->cols;
+	decoded->rows = image->rows;
+	decoded->image = (Color **) malloc(sizeof(Color*) * totp);
 
-    for (int i = 1; i < image->rows + 1; ++i) {
-        for (int j = 1; j < image->cols + 1; ++j) {
-           decoded->image[(i - 1) * (j - 1)] = (Color*) malloc(sizeof(Color));
-           decoded->image[(i - 1) * (j - 1)] = evaluateOnePixel(image, i, j);
-        }
-    }
-    return decoded;
+	for (int i = 0; i < image->rows; ++i) {
+		for (int j = 0; j < image->cols; ++j) {
+			decoded->image[i * image->cols + j] = evaluateOnePixel(image, i, j);
+		}
+	}
+	return decoded;
 }
 
 /*
-Loads a file of ppm P3 format from a file, and prints to stdout (e.g. with printf) a new image, 
-where each pixel is black if the LSB of the B channel is 0, 
+Loads a file of ppm P3 format from a file, and prints to stdout (e.g. with printf) a new image,
+where each pixel is black if the LSB of the B channel is 0,
 and white if the LSB of the B channel is 1.
-
 argc stores the number of arguments.
 argv stores a list of arguments. Here is the expected input:
 argv[0] will store the name of the program (this happens automatically).
@@ -68,12 +59,17 @@ Make sure to free all memory before returning!
 int main(int argc, char **argv)
 {
 	//YOUR CODE HERE
-    Image *origin = readData(argv[1]);
-    if (origin == NULL) {
-        return -1;
-    }
-    Image *decoded = steganography(origin);
-    writeData(decoded);
-    free(origin);
-    free(decoded);
+	if (argc != 2) {
+		printf("Usage: %s <colorfile>\n", argv[0]);
+		return 1;
+	}
+	Image *origin = readData(argv[1]);
+	if (origin == NULL) {
+		return -1;
+	}
+	Image *decoded = steganography(origin);
+	writeData(decoded);
+	freeImage(origin);
+	freeImage(decoded);
+	return 0;
 }
