@@ -34,7 +34,7 @@ Image *readData(char *filename)
 	Image *p = (Image*)malloc(sizeof(Image));
 	char p_x[3];
 	int x;
-	fscanf(ptr, "%s %u %u %u", p_x, &x, &p->rows, &p->cols);
+	fscanf(ptr, "%s %u %u %u", p_x, &x, &p->cols, &p->rows);
 	p->image = (Color**)malloc(sizeof(Color*) * p->rows * p->cols);
 
 	int totp = p->rows * p->cols;
@@ -44,7 +44,6 @@ Image *readData(char *filename)
 		fscanf(ptr, "%hhu %hhu %hhu", &p->image[i]->R, &p->image[i]->G, &p->image[i]->B);
 	}
 	fclose(ptr);
-	
 	return p;
 }
 
@@ -52,6 +51,16 @@ Image *readData(char *filename)
 void writeData(Image *image)
 {
 	//YOUR CODE HERE
+    printf("P3\n%d %d\n255\n", image->cols, image->rows);
+    Color** p = image->image;
+    for (int i = 0; i < image->rows; i++) {
+        for (int j = 0; j < image->cols - 1; j++) {
+            printf("%3hhu %3hhu %3hhu   ", (*p)->R, (*p)->G, (*p)->B);
+            p++;
+        }
+        printf("%3hhu %3hhu %3hhu\n", (*p)->R, (*p)->G, (*p)->B);
+        p++;
+    }
 }
 
 //Frees an image

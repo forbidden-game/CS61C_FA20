@@ -32,9 +32,7 @@ int main(int argc, char **argv)
 	uint32_t rule;
 	char *filename;
 	processCLI(argc,argv,&filename);
-	if (image = readData(filename)) {
-		printf("Yes!");
-	}
-	//writeData(image);
+	image = readData(filename);
+	writeData(image);
 	//freeImage(image);
 }
