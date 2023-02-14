@@ -34,5 +34,5 @@ int main(int argc, char **argv)
 	processCLI(argc,argv,&filename);
 	image = readData(filename);
 	writeData(image);
-	//freeImage(image);
+	freeImage(image);
 }

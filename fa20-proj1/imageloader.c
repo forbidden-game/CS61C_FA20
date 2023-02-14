@@ -29,12 +29,12 @@ Image *readData(char *filename)
 	FILE *ptr = fopen(filename, "r");
 	if (ptr == NULL) {
 		printf("no such file.\n");
-		return 0;
+		return NULL;
 	}
 	Image *p = (Image*)malloc(sizeof(Image));
 	char p_x[3];
-	int x;
-	fscanf(ptr, "%s %u %u %u", p_x, &x, &p->cols, &p->rows);
+	int maxcolor;
+	fscanf(ptr, "%s %u %u %u", p_x, &p->cols, &p->rows, &maxcolor);
 	p->image = (Color**)malloc(sizeof(Color*) * p->rows * p->cols);
 
 	int totp = p->rows * p->cols;
@@ -45,6 +45,8 @@ Image *readData(char *filename)
 	}
 	fclose(ptr);
 	return p;
+
+
 }
 
 //Given an image, prints to stdout (e.g. with printf) a .ppm P3 file with the image's data.
@@ -67,4 +69,10 @@ void writeData(Image *image)
 void freeImage(Image *image)
 {
 	//YOUR CODE HERE
+    int totp = image->cols * image->rows;
+    for (int i = 0; i < totp; ++i) {
+        free(image->image[i]);
+    }
+    free(image->image);
+    free(image);
 }
