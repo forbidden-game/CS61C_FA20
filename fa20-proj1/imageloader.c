@@ -26,6 +26,26 @@
 Image *readData(char *filename) 
 {
 	//YOUR CODE HERE
+	FILE *ptr = fopen(filename, "r");
+	if (ptr == NULL) {
+		printf("no such file.\n");
+		return 0;
+	}
+	Image *p = (Image*)malloc(sizeof(Image));
+	char p_x[3];
+	int x;
+	fscanf(ptr, "%s %u %u %u", p_x, &x, &p->rows, &p->cols);
+	p->image = (Color**)malloc(sizeof(Color*) * p->rows * p->cols);
+
+	int totp = p->rows * p->cols;
+	
+	for (int i = 0; i < totp; ++i) {
+		p->image[i] = (Color*)malloc(sizeof(Color));
+		fscanf(ptr, "%hhu %hhu %hhu", &p->image[i]->R, &p->image[i]->G, &p->image[i]->B);
+	}
+	fclose(ptr);
+	
+	return p;
 }
 
 //Given an image, prints to stdout (e.g. with printf) a .ppm P3 file with the image's data.
