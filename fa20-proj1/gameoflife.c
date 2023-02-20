@@ -17,29 +17,63 @@
 #include <inttypes.h>
 #include "imageloader.h"
 
-//Get the num of lives around image.
-int getLives(Image *image, int frontRow, int frontCol, int nextRow, int nextCol) {
+int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+int dy[8] = {1, 0, -1, 1, -1, 1, 0, -1};
 
+int ring(int n, int m) {
+	return (n + m) % m;
 }
-
-
 //Determines what color the cell at the given row/col should be. This function allocates space for a new Color.
 //Note that you will need to read the eight neighbors of the cell in question. The grid "wraps", so we treat the top row as adjacent to the bottom row
 //and the left column as adjacent to the right column.
 Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 {
 	//YOUR CODE HERE
-	int frontRow, frontCol, nextRow, nextCol;
-	row == 0 ? frontRow = image->rows - 1 : frontRow = row - 1;
-	row == image->rows - 1 ? nextRow = 0 : nextRow = row + 1;
-	col == 0 ? frontCol = image->cols - 1 : frontCol = col - 1;
-	col == image->cols - 1 ? nextCol = 0 : nextCol = col + 1;
-	int aroundLives;
-	aroundLives = getLives(image, frontRow, frontCol, nextRow, nextCol);
-	switch (rule) {
-		case 0x1808:
+	Color *nextState = (Color*)malloc(sizeof(Color));
+	int aliveNeighboursR = 0, aliveNeighboursG = 0, aliveNeighboursB = 0;
+	int isAliveR, isAliveG, isAliveB;
+	int idxR, idxG, idxB;
 
+	isAliveR = (*(image->image + row * image->cols + col))->R == 255;
+	isAliveG = (*(image->image + row * image->cols + col))->G == 255;
+	isAliveB = (*(image->image + row * image->cols + col))->B == 255;
+
+	for (int i = 0; i < 8; i++) {
+		int newrow = ring(row + dx[i], image->rows);
+		int newcol = ring(col + dy[i], image->cols);
+		if ((*(image->image + newrow * image->cols + newcol))->R == 255) {
+			aliveNeighboursR++;
+		}
+		if ((*(image->image + newrow * image->cols + newcol))->G == 255) {
+			aliveNeighboursG++;
+		}
+		if ((*(image->image + newrow * image->cols + newcol))->B == 255) {
+			aliveNeighboursB++;
+		}
 	}
+	idxR = 9 * isAliveR + aliveNeighboursR;
+	idxG = 9 * isAliveG + aliveNeighboursG;
+	idxB = 9 * isAliveB + aliveNeighboursB;
+
+	if (rule & (1<<idxR)) {
+		nextState->R = 255;
+	} else {
+		nextState->R = 0;
+	}
+
+	if (rule & (1<<idxG)) {
+		nextState->G = 255;
+	} else {
+		nextState->G = 0;
+	}
+
+	if (rule & (1<<idxB)) {
+		nextState->B = 255;
+	} else {
+		nextState->B = 0;
+	}
+
+	return nextState;
 }
 
 //The main body of Life; given an image and a rule, computes one iteration of the Game of Life.
