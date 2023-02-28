@@ -17,7 +17,7 @@ relu:
     addi sp sp -4
     sw s0 0(sp)
     # END Prologue
-
+    
     li t0 1
     li t1 0
     bge a1 t0 loop_start
@@ -42,10 +42,6 @@ loop_end:
     li a0 17
     li a1 0
     ecall
-
     # Epilogue
-    lw s0 0(sp)
-    addi sp sp 4
-    # END Epilogue
-    
+
     jr ra
