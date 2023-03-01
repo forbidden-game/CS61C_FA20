@@ -34,36 +34,51 @@ abs_loss
 
 
 class TestAbsLoss(unittest.TestCase):
-    def test_simple(self):
+
+    def test_abs_loss_standard(self):
         # load the test for abs_loss.s
         t = AssemblyTest(self, "../coverage-src/abs_loss.s")
 
-        raise NotImplementedError("TODO")
-
         # create array0 in the data section
         # TODO
+        array0 = t.array([1, -2, 3, 4, 5, 6, 7, 8, 9])
         # load address of `array0` into register a0
         # TODO
+        t.input_array("a0", array0)
         # create array1 in the data section
         # TODO
+        array1 = t.array([-1, -6, 1, 6, 1, 6, 1, 6, 1])
         # load address of `array1` into register a1
         # TODO
+        t.input_array("a1", array1)
         # set a2 to the length of the array
         # TODO
+        t.input_scalar("a2", len(array0))
         # create a result array in the data section (fill values with -1)
         # TODO
+        output_array = t.array([-1] * len(array0))
         # load address of `array2` into register a3
         # TODO
+        t.input_array("a3", output_array)
         # call the `abs_loss` function
         # TODO
+        t.call("abs_loss")
         # check that the result array contains the correct output
         # TODO
+        t.check_array(output_array, [2, 4, 2, 2, 4, 0, 6, 2, 8])
         # check that the register a0 contains the correct output
         # TODO
+        t.check_scalar("a0", 30)
         # generate the `assembly/TestAbsLoss_test_simple.s` file and run it through venus
-        t.execute()
+        t.execute(code=0)
 
     # Add other test cases if neccesary
+
+    def test_abs_loss_invalid_length(self):
+        t = AssemblyTest(self, "../coverage-src/abs_loss.s")
+        t.input_scalar("a2", -2)
+        t.call("abs_loss")
+        t.execute(code=36)
 
     @classmethod
     def tearDownClass(cls):
